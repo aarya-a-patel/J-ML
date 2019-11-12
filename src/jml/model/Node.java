@@ -4,15 +4,15 @@ public class Node {
 	
 	private double total;
 	
-	private Connection[] connections;
+	private double[] weights;
 	
 	public Node() {
 		total = 0;
 	}
 	public Node(int numConnect) {
-		connections = new Connection[numConnect];
+		weights = new double[numConnect];
 		for(int i = 0; i < numConnect; i++) {
-			connections[i] = new Connection();
+			weights[i] = Math.random();
 		}
 	}
 	public void setSum(double[] input) {
@@ -27,16 +27,11 @@ public class Node {
 	public double sigmoid() {
 		return (1/(1 + Math.pow(Math.E, total)));
 	}
-	public void setInpPerceptron() {
-		for(int i = 0; i < connections.length; i++) {
-			connections[i].setWeight(1);
-		}
-	}
-	
+
 	public String toString() {
 		String returnString = "";
-		for(int i = 0; i < connections.length; i++) {
-			returnString += "\nConnection " + Integer.toString(i+1) + ":   " + connections[i].toString();
+		for(int i = 0; i < weights.length; i++) {
+			returnString += "\nConnection " + Integer.toString(i+1) + ":   " + Double.toString(weights[i]);
 		}
 		return returnString;
 	}
