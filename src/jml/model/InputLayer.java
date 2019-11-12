@@ -3,9 +3,9 @@ package jml.model;
 import java.util.ArrayList;
 
 public class InputLayer {
-	private ArrayList<Double> inputs;
+	private double[] inputs;
 	
 	public InputLayer(int numInputs) {
-		inputs = new ArrayList<Double>(numInputs);
+		inputs = new double[numInputs];
 	}
 }
