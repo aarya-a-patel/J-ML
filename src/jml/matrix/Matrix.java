@@ -1,6 +1,6 @@
 package jml.matrix;
 
-import matrix.exceptions.InvalidMatrixDimensionsException;
+import jml.matrix.exceptions.InvalidMatrixDimensionsException;
 
 public class Matrix {
 	private double array[][];
