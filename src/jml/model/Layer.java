@@ -15,4 +15,15 @@ public class Layer {
 	public int getNumNodes() {
 		return nodes.length;
 	}
+	
+	public double[] calculate(double[] previousLayerOutputs) {
+		
+		double[] out = new double[nodes.length];
+		
+		for (int i = 0; i < out.length; i++) {
+			out[i] = nodes[i].calculate(previousLayerOutputs);
+		}
+		
+		return out;
+	}
 }

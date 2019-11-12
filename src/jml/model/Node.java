@@ -11,7 +11,7 @@ public class Node {
 	}
 	public Node(int numConnect) {
 		weights = new double[numConnect];
-		for(int i = 0; i < numConnect; i++) {
+		for(int i = 0; i < numConnect + 1; i++) {
 			weights[i] = Math.random();
 		}
 	}
@@ -24,10 +24,21 @@ public class Node {
 	public void setSum(double input) {
 		total = input;
 	}
-	public double sigmoid() {
-		return (1/(1 + Math.pow(Math.E, total)));
+	public double sigmoid(double x) {
+		return (1/(1 + Math.pow(Math.E, -x)));
 	}
-
+	
+	public double calculate(double[] previousLayerOutputs) {
+		double sum = weights[weights.length - 1];
+		
+		for (int i = 0; i < previousLayerOutputs.length; i++) {
+			sum += weights[i] * previousLayerOutputs[i];
+		}
+		
+		return sigmoid(sum);
+		
+	}
+	
 	public String toString() {
 		String returnString = "";
 		for(int i = 0; i < weights.length; i++) {
