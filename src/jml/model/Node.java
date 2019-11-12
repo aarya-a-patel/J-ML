@@ -1,4 +1,4 @@
-package aarya.libml.model;
+package jml.model;
 
 import java.util.ArrayList;
 import java.util.Random;

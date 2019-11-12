@@ -1,3 +1,4 @@
+package jml.model;
 public class Matrix {
 	private double array[][];
 
