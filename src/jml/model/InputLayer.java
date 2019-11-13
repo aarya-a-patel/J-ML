@@ -1,6 +1,6 @@
 package jml.model;
 
-public class InputLayer extends Layer{
+public class InputLayer extends Layer {
 	
 	public InputLayer(final int numInputs)  {
 		super();
@@ -13,8 +13,5 @@ public class InputLayer extends Layer{
 	public double[] calculate(double[] previousLayerOutputs) {
 		return previousLayerOutputs;
 		
-	}
-	public double[] getInputs() {
-		return inputs;
 	}
 }
