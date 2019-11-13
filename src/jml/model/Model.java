@@ -1,7 +1,5 @@
 package jml.model;
 
-import java.util.ArrayList;
-
 public class Model {
 	private Layer[] layers;
 
