@@ -23,7 +23,7 @@ public class Model {
 	
 	public void feedForward() {
 		for (int i = 0; i < layers.length; i++) {
-			layers[i].calculate(layers[i - 1].getNodeWeights());
+			layers[i].calculate(layers[i - 1].getNodeOutputs());
 		}
 	}
 }

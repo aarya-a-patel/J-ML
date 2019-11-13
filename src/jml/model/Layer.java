@@ -31,7 +31,7 @@ public class Layer {
 		
 		return out;
 	}
-	public double[] getNodeWeights() {
+	public double[] getNodeOutputs() {
 		double returnWeights[] = new double[nodes.length];
 		for(int i = 0; i < nodes.length; i++) {
 			returnWeights[i] = nodes[i].getSum();
