@@ -3,7 +3,11 @@ package jml.model;
 import java.util.ArrayList;
 
 public class Layer {
-	private Node[] nodes;
+	protected Node[] nodes;
+	
+	public Layer() {
+		
+	}
 	
 	public Layer(final int numNodes, final int previousLayer) {
 		nodes = new Node[numNodes];
