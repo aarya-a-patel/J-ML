@@ -18,4 +18,11 @@ public class Model {
 			}
 		}
 	}
+	
+	public void feedForward() {
+		layers[0].calculate(inputLayer.getInputs());
+		for(int i = 1; i < layers.length; i++) {
+			layers[i].calculate(layers[i-1].getNodeWeights());
+		}
+	}
 }

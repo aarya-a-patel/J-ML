@@ -8,4 +8,7 @@ public class InputLayer {
 	public InputLayer(int numInputs) {
 		inputs = new double[numInputs];
 	}
+	public double[] getInputs() {
+		return inputs;
+	}
 }

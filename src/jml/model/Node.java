@@ -34,9 +34,13 @@ public class Node {
 		for (int i = 0; i < previousLayerOutputs.length; i++) {
 			sum += weights[i] * previousLayerOutputs[i];
 		}
+		total = sigmoid(sum);
 		
 		return sigmoid(sum);
-		
+	}
+	
+	public double getSum() {
+		return total;
 	}
 	
 	public String toString() {
