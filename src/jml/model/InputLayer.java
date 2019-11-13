@@ -1,18 +1,12 @@
 package jml.model;
 
-public class InputLayer extends Layer{
+import java.util.ArrayList;
+
+public class InputLayer {
+	private double[] inputs;
 	
-	public InputLayer(final int numInputs)  {
-		super();
-		nodes = new Node[numInputs];
-		for (int i = 0; i < numInputs	; i++) {
-			nodes[i] =  new Node(1);
-		}
-	}
-	
-	public double[] calculate(double[] previousLayerOutputs) {
-		return previousLayerOutputs;
-		
+	public InputLayer(int numInputs) {
+		inputs = new double[numInputs];
 	}
 	public double[] getInputs() {
 		return inputs;
