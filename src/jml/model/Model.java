@@ -21,7 +21,7 @@ public class Model {
 		return out;
 	}
 	
-	public void feedForward() {
+	public void feedForward(double[] inp) {
 		for (int i = 0; i < layers.length; i++) {
 			layers[i].calculate(layers[i - 1].getNodeOutputs());
 		}
