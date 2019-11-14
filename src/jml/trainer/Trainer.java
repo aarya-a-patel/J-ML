@@ -4,9 +4,6 @@ import jml.model.Model;
 import jml.matrix.Matrix;
 
 public class Trainer extends Model implements Runnable {
-
-	private Matrix inputs;
-	private Matrix answers;
 	
 	private DataParser data;
 	
