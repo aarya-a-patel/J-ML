@@ -13,22 +13,12 @@ public class Model {
 		}
 	}
 	
-	public double[] calculate(double[] inputs) {
+	public double[] feedForward(double[] inputs) {
 		double[] out = inputs;
 		for (int i = 0; i < layers.length; i++) {
 			out = layers[i].calculate(out);
 		}
 		return out;
-	}
-	
-	public void feedForward() {
-		for (int i = 1; i < layers.length; i++) {
-			layers[i].calculate(layers[i - 1].getNodeOutputs());
-		}
-	}
-	
-	public void setInputs(final double[] inp) {
-		layers[0].setValues(inp);
 	}
 	
 	public String toString() {
