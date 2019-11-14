@@ -13,6 +13,6 @@ public class Trainer extends Model implements Runnable {
 	}
 
 	public void run() {
-		
+		//Training -- Need to make other methods to support gradient descent and dataparser
 	}
 }
