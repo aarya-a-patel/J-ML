@@ -8,7 +8,7 @@ public class Trainer extends Model {
 	private Matrix inputs;
 	private Matrix answers;
 	
-	public Trainer(final int layerSizes[], final int numDataPieces){
-		super(layerSizes);
+	public Trainer(Model model, DataParser data){
+		super(model);
 	}
 }

@@ -13,6 +13,14 @@ public class Model {
 		}
 	}
 	
+	public Model(Model model) {
+		this.layers = model.getLayers();
+	}
+	
+	public Layer[] getLayers() {
+		return this.layers;
+	}
+	
 	public double[] feedForward(double[] inputs) {
 		double[] out = inputs;
 		for (int i = 0; i < layers.length; i++) {
