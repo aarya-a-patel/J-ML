@@ -1,7 +1,7 @@
 package jml.model;
 
 public class Model {
-	private Layer[] layers;
+	protected Layer[] layers;
 
 	public Model(final int layerSizes[]) {
 		layers = new Layer[layerSizes.length];
