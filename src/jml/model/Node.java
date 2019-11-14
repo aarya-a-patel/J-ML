@@ -10,8 +10,8 @@ public class Node {
 		total = 0;
 	}
 	public Node(int numConnect) {
-		weights = new double[numConnect];
-		for(int i = 0; i < numConnect + 1; i++) {
+		weights = new double[numConnect+1];
+		for(int i = 0; i < numConnect; i++) {
 			weights[i] = Math.random();
 		}
 	}
@@ -44,10 +44,13 @@ public class Node {
 	}
 	
 	public String toString() {
-		String returnString = "";
-		for(int i = 0; i < weights.length; i++) {
+		String returnString = "\n\n";
+		for(int i = 0; i < weights.length - 1; i++) {
 			returnString += "\nConnection " + Integer.toString(i+1) + ":   " + Double.toString(weights[i]);
 		}
+		returnString += "\nBias " + Double.toString(weights[weights.length-1]);
+		returnString+= "\n\nTotal: " + Double.toString(total);
+		returnString += "\n\n";
 		return returnString;
 	}
 }

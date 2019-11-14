@@ -38,4 +38,19 @@ public class Layer {
 		}
 		return returnWeights;
 	}
+	
+	public void setValues(final double[] inp) {
+		for(int i = 0; i < inp.length; i++) {
+			nodes[i].setSum(inp[i]);
+		}
+	}
+	
+	public String toString() {
+		String returnString = "\n\n";
+		for(int i = 0; i < nodes.length; i++) {
+			returnString += "\nNeuron " + Integer.toString(i+1) + ":   " + nodes[i].toString();
+		}
+		returnString += "\n\n";
+		return returnString;
+	}
 }

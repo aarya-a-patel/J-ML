@@ -21,9 +21,22 @@ public class Model {
 		return out;
 	}
 	
-	public void feedForward(double[] inp) {
-		for (int i = 0; i < layers.length; i++) {
+	public void feedForward() {
+		for (int i = 1; i < layers.length; i++) {
 			layers[i].calculate(layers[i - 1].getNodeOutputs());
 		}
+	}
+	
+	public void setInputs(final double[] inp) {
+		layers[0].setValues(inp);
+	}
+	
+	public String toString() {
+		String returnString = "\n\n";
+		for(int i = 0; i < layers.length; i++) {
+			returnString += "\nLayer " + Integer.toString(i+1) + ":   " + layers[i].toString();
+		}
+		returnString += "\n\n";
+		return returnString;
 	}
 }
