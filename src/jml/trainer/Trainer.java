@@ -1,4 +1,4 @@
-package jml.Trainer;
+package jml.trainer;
 
 import jml.model.Model;
 import jml.matrix.Matrix;
