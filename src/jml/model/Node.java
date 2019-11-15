@@ -5,15 +5,18 @@ public class Node {
 	private double total;
 	
 	private double[] weights;
+	private double bias;
 	
 	public Node() {
 		total = 0;
 	}
 	public Node(int numConnect) {
-		weights = new double[numConnect+1];
+		weights = new double[numConnect];
 		for(int i = 0; i < numConnect; i++) {
 			weights[i] = Math.random();
 		}
+		
+		bias = Math.random();
 	}
 	public void setSum(double[] input) {
 		total = 0;
@@ -29,7 +32,7 @@ public class Node {
 	}
 	
 	public double calculate(double[] previousLayerOutputs) {
-		double sum = weights[weights.length - 1];
+		double sum = bias;
 		
 		for (int i = 0; i < previousLayerOutputs.length; i++) {
 			sum += weights[i] * previousLayerOutputs[i];
@@ -43,8 +46,12 @@ public class Node {
 		return total;
 	}
 	
-	public double getWeight(int i) {
-		return weights[i];
+	public double[] getWeights() {
+		return weights;
+	}
+	
+	public double getBias() {
+		return bias;
 	}
 	
 	public String toString() {

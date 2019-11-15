@@ -1,7 +1,11 @@
 package jml.model;
 
+import jml.matrix.Matrix;
+
 public class Layer {
 	protected Node[] nodes;
+	protected Matrix weights;
+	protected Matrix biases;
 	
 	public Layer() {
 		
@@ -11,6 +15,13 @@ public class Layer {
 		nodes = new Node[numNodes];
 		for (int i = 0; i < numNodes; i++) {
 			nodes[i] =  new Node(previousLayer);
+		}
+		weights = new Matrix(numNodes, previousLayer);
+		biases = new Matrix(numNodes, 1);
+		
+		for (int i = 0; i < numNodes; i++) {
+			weights.getArray()[i] = nodes[i].getWeights();
+			biases.getArray()[i][0] = nodes[i].getBias();
 		}
 	}
 	
@@ -45,6 +56,14 @@ public class Layer {
 	
 	public Node getNode(int index) {
 		return nodes[index];
+	}
+	
+	public Matrix getWeights() {
+		return weights;
+	}
+	
+	public Matrix getBiases() {
+		return biases;
 	}
 	
 	public String toString() {

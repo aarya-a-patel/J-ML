@@ -282,13 +282,7 @@ public class Matrix {
 
 	// Returns double array in Class
 	public double[][] getArray() {
-		double[][] returnArray = new double[array.length][array[0].length];
-		for (int i = 0; i < array.length; i++) {
-			for (int j = 0; j < array[0].length; j++) {
-				returnArray[i][j] = array[i][j];
-			}
-		}
-		return returnArray;
+		return array;
 	}
 
 	// Returns Matrix element at position (x,y)
