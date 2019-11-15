@@ -1,6 +1,7 @@
 package jml.trainer;
 
 import jml.matrix.Matrix;
+import jml.matrix.exceptions.InvalidMatrixDimensionsException;
 import jml.model.Model;
 
 public class Trainer extends Model implements Runnable {
@@ -28,7 +29,10 @@ public class Trainer extends Model implements Runnable {
 	public void run() {
 		while (running) {
 			System.out.println("running -- Placeholder");
-
+			double[] input = data.parseData(0);
+			this.feedForward(input);
+			this.makeChanges(input);
+			System.out.println(this.toString());
 		}
 	}
 
@@ -77,7 +81,17 @@ public class Trainer extends Model implements Runnable {
 				}
 				biases[l].getArray()[n][0] = baseDerivative[n] * getBiasDerivative();
 			}
-
+			
+			for (int j = 0; j < layers.length; j++) {
+				try {
+					layers[j].getWeights().ReferencedSubtract(weights[j]);
+					layers[j].getBiases().ReferencedSubtract(biases[j]);
+				} catch (InvalidMatrixDimensionsException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
 			baseDerivative = currDerivative;
 			currDerivative = null;
 		}

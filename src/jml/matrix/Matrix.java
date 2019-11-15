@@ -165,6 +165,21 @@ public class Matrix {
 		}
 	}
 
+	public void ReferencedSubtract(Matrix subtractor) throws InvalidMatrixDimensionsException {
+		try {
+			for (int i = 0; i < subtractor.width(); i++) {
+				for (int j = 0; j < subtractor.height(); j++) {
+					array[i][j] -= subtractor.getArray(i, j);
+				}
+			}
+		} catch (Exception e) {
+			throw new InvalidMatrixDimensionsException(
+					"Size Mismatch-  Input: " + "[" + Integer.toString(subtractor.width()) + ","
+							+ Integer.toString(subtractor.height()) + "] -- Class Array: " + "["
+							+ Integer.toString(array.length) + "," + Integer.toString(array[0].length) + "]");
+		}
+	}
+
 	// ----------------------------------------------------------------------------------------------------------------------------
 
 	// Returns scalar multiplication of each element of Matrix by double
@@ -245,7 +260,7 @@ public class Matrix {
 							+ Integer.toString(array.length) + "," + Integer.toString(array[0].length) + "]");
 		}
 	}
-	
+
 	public Matrix Multiply(Matrix multiplier) throws InvalidMatrixDimensionsException {
 		if (this.height() == multiplier.width()) {
 			double[][] returnArray = new double[this.width()][multiplier.height()];
@@ -295,7 +310,7 @@ public class Matrix {
 					+ Integer.toString(array[0].length) + "]");
 		}
 	}
-	
+
 	// Sets Matrix element at position (x,y)
 	public void setArray(int x, int y, double element) {
 		array[x][y] = element;
