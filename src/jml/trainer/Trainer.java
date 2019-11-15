@@ -1,5 +1,6 @@
 package jml.trainer;
 
+import jml.matrix.Matrix;
 import jml.model.Model;
 
 public class Trainer extends Model implements Runnable {
@@ -34,34 +35,49 @@ public class Trainer extends Model implements Runnable {
 	public void makeChanges(double[] actual) {
 		double[] baseDerivative;
 		double[] currDerivative;
-		
+
+		Matrix[] weights = new Matrix[layers.length];
+		Matrix[] biases = new Matrix[layers.length];
+
 		int l = layers.length - 1;
-		
+
+		weights[l] = new Matrix(layers[l].getNumNodes(), layers[l].getNode(0).getWeights().length);
+		biases[l] = new Matrix(layers[l].getNumNodes(), 1);
+
 		baseDerivative = new double[layers[l].getNumNodes()];
-		
+
 		for (int n = 0; n < layers[l].getNumNodes(); n++) {
 			baseDerivative[n] = getCostDerivative(actual[n], nodeOutputs[l][n]) * getNodeDerivative(l, n);
-		}
-		
-		
-		for (--l; l > 0; l--) {
-			currDerivative = new double[layers[l].getNumNodes()];
-			
-			for (int n = 0; n < layers[l].getNumNodes(); n++) {
-				
-				currDerivative[n] = 0;
-				
-				for (int p = 0; p < baseDerivative.length; p++) {
-					currDerivative[n] += baseDerivative[p] * getPrevNodeDerivative(l + 1, p, n) * getNodeDerivative(l, n);
-				}
-				
-				currDerivative[n] /= baseDerivative.length;
-				
-				
-				// Compute Changes to weights and biases here or add to Matrix for change later
-				
+			for (int w = 0; w < layers[l].getNode(n).getWeights().length; w++) {
+				weights[l].getArray()[n][w] = baseDerivative[n] * getWeightDerivative(l, w);
 			}
-			
+			biases[l].getArray()[n][0] = baseDerivative[n] * getBiasDerivative();
+		}
+
+		for (--l; l > 0; l--) {
+			weights[l] = new Matrix(layers[l].getNumNodes(), layers[l].getNode(0).getWeights().length);
+			biases[l] = new Matrix(layers[l].getNumNodes(), 1);
+
+			currDerivative = new double[layers[l].getNumNodes()];
+
+			for (int n = 0; n < layers[l].getNumNodes(); n++) {
+
+				currDerivative[n] = 0;
+
+				for (int p = 0; p < baseDerivative.length; p++) {
+					currDerivative[n] += baseDerivative[p] * getPrevNodeDerivative(l + 1, p, n)
+							* getNodeDerivative(l, n);
+				}
+
+				currDerivative[n] /= baseDerivative.length;
+
+				// Compute Changes to weights and biases here or add to Matrix for change later
+				for (int w = 0; w < layers[l].getNode(n).getWeights().length; w++) {
+					weights[l].getArray()[n][w] = baseDerivative[n] * getWeightDerivative(l, w);
+				}
+				biases[l].getArray()[n][0] = baseDerivative[n] * getBiasDerivative();
+			}
+
 			baseDerivative = currDerivative;
 			currDerivative = null;
 		}
