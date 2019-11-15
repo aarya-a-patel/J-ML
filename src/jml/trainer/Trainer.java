@@ -25,8 +25,45 @@ public class Trainer extends Model implements Runnable {
 	}
 
 	public void run() {
-		while(running) {
+		while (running) {
 			System.out.println("running -- Placeholder");
+
+		}
+	}
+
+	public void makeChanges(double[] actual) {
+		double[] baseDerivative;
+		double[] currDerivative;
+		
+		int l = layers.length - 1;
+		
+		baseDerivative = new double[layers[l].getNumNodes()];
+		
+		for (int n = 0; n < layers[l].getNumNodes(); n++) {
+			baseDerivative[n] = getCostDerivative(actual[n], nodeOutputs[l][n]) * getNodeDerivative(l, n);
+		}
+		
+		
+		for (--l; l > 1; l--) {
+			currDerivative = new double[layers[l].getNumNodes()];
+			
+			for (int n = 0; n < layers[l].getNumNodes(); n++) {
+				
+				currDerivative[n] = 0;
+				
+				for (int p = 0; p < baseDerivative.length; p++) {
+					currDerivative[n] += baseDerivative[p] * getPrevNodeDerivative(l + 1, p, n);
+				}
+				
+				currDerivative[n] /= baseDerivative.length;
+				
+				
+				// Compute Changes to weights and biases here or add to Matrix for change later
+				
+			}
+			
+			baseDerivative = currDerivative;
+			currDerivative = null;
 		}
 	}
 
