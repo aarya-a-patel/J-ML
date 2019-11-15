@@ -61,7 +61,7 @@ public class Trainer extends Model implements Runnable {
 	}
 
 	public double getPrevNodeDerivative(int layerNum, int nodeNum, int prevNodeNum) {
-		return layers[layerNum].getNode(nodeNum).getWeight(prevNodeNum);
+		return layers[layerNum].getNode(nodeNum).getWeights()[prevNodeNum];
 	}
 
 	public double[] feedForward(double[] inputs) {
