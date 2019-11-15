@@ -43,6 +43,10 @@ public class Node {
 		return total;
 	}
 	
+	public double getWeight(int i) {
+		return weights[i];
+	}
+	
 	public String toString() {
 		String returnString = "\n\n";
 		for(int i = 0; i < weights.length - 1; i++) {
