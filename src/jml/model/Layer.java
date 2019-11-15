@@ -43,6 +43,10 @@ public class Layer {
 		}
 	}
 	
+	public Node getNode(int index) {
+		return nodes[index];
+	}
+	
 	public String toString() {
 		String returnString = "\n\n";
 		for(int i = 0; i < nodes.length; i++) {

@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 import jml.model.Model;
 import jml.trainer.Trainer;
 
