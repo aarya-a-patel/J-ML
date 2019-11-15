@@ -12,8 +12,7 @@ public class ModelTester {
 
 		Trainer t = new Trainer(m, dp);
 
-		Thread thread = new Thread(t);
-		thread.start();
+		t.start();
 
 	}
 }

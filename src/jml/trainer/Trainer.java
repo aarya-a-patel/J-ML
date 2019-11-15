@@ -7,15 +7,39 @@ public class Trainer extends Model implements Runnable {
 	private DataParser data;
 	private double[][] nodeOutputs;
 	private boolean running;
+	private Thread thread;
 
 	public Trainer(Model model, DataParser data) {
 		super(model);
 		this.data = data;
-		running = false;
+		this.running = false;
+		this.nodeOutputs = new double[layers.length][];
+	}
+
+	public void start() {
+		if (running)
+			return;
+		running = true;
+		thread = new Thread(this);
+		thread.start();
 	}
 
 	public void run() {
-		
+		while(running) {
+			System.out.println("running -- Placeholder");
+		}
+	}
+
+	public void stop() {
+		if (!running)
+			return;
+		running = false;
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
 	}
 
 	public double getBiasDerivative() {
@@ -35,7 +59,7 @@ public class Trainer extends Model implements Runnable {
 		double z = -Math.log((1 - y) / y);
 		return Math.pow(Math.E, -z) / Math.pow(1 + Math.pow(Math.E, -z), 2);
 	}
-	
+
 	public double getPrevNodeDerivative(int layerNum, int nodeNum, int prevNodeNum) {
 		return layers[layerNum].getNode(nodeNum).getWeight(prevNodeNum);
 	}
