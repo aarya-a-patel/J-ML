@@ -44,7 +44,7 @@ public class Trainer extends Model implements Runnable {
 		}
 		
 		
-		for (--l; l > 1; l--) {
+		for (--l; l > 0; l--) {
 			currDerivative = new double[layers[l].getNumNodes()];
 			
 			for (int n = 0; n < layers[l].getNumNodes(); n++) {
@@ -52,7 +52,7 @@ public class Trainer extends Model implements Runnable {
 				currDerivative[n] = 0;
 				
 				for (int p = 0; p < baseDerivative.length; p++) {
-					currDerivative[n] += baseDerivative[p] * getPrevNodeDerivative(l + 1, p, n);
+					currDerivative[n] += baseDerivative[p] * getPrevNodeDerivative(l + 1, p, n) * getNodeDerivative(l, n);
 				}
 				
 				currDerivative[n] /= baseDerivative.length;
