@@ -29,13 +29,23 @@ public class Model {
 		return out;
 	}
 	
-	public double[] getError(double[] actualValues) {
+	public double[] getErrors(double[] actualValues) {
 		double[] errors = layers[layers.length -1].getNodeOutputs();
 		for(int i = 0; i < errors.length; i++) {
 			errors[i] = Math.pow(errors[i]-actualValues[i], 2);
 		}
 		return errors;
 		
+	}
+	
+	public double getTotalError(double[] actualValues) {
+		double average = 0;
+		double[] total = getErrors(actualValues);
+		for(double sum: total) {
+			average+=sum;
+		}
+		average/= actualValues.length;
+		return average;
 	}
 	
 	public String toString() {
