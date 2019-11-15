@@ -29,6 +29,15 @@ public class Model {
 		return out;
 	}
 	
+	public double[] getError(double[] actualValues) {
+		double[] errors = layers[layers.length -1].getNodeOutputs();
+		for(int i = 0; i < errors.length; i++) {
+			errors[i] = Math.pow(errors[i]-actualValues[i], 2);
+		}
+		return errors;
+		
+	}
+	
 	public String toString() {
 		String returnString = "\n\n";
 		for(int i = 0; i < layers.length; i++) {
