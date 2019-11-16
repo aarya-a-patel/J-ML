@@ -33,7 +33,7 @@ public class Trainer extends Model implements Runnable {
 			double[] actual = data.getActuals();
 			data.increment();
 			this.feedForward(input);
-			this.makeChanges(input);
+			this.makeChanges(actual);
 			System.out.println(this.toString());
 		}
 	}
