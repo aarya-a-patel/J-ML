@@ -37,4 +37,16 @@ public class Model {
 		returnString += "\n\n";
 		return returnString;
 	}
+	
+	public double calculateError(double[] predicted, double[] actual) {
+		
+		double squaredSum = 0;
+		
+		for (int i = 0; i < predicted.length; i++) {
+			squaredSum += Math.pow(predicted[i] - actual[i],2);
+		}
+		
+		return squaredSum / layers.length;
+		
+	}
 }
