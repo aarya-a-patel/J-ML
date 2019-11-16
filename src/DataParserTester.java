@@ -1,13 +1,14 @@
-import jml.trainer.DataParser;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
+
+import jml.trainer.DataParser;
 
 public class DataParserTester implements DataParser {
 
-	private double[] inputs;
-	private double[] actual;
+	private ArrayList<Double> inputs;
+	private ArrayList<Double> actual;
 	private int position = 0;
 
 	@Override
@@ -25,20 +26,20 @@ public class DataParserTester implements DataParser {
 	@Override
 	public double[] getInputs() {
 
-		double[] retInputs = { inputs[position] };
+		double[] retInputs = { inputs.get(position) };
 
 		return retInputs;
 	}
 
 	public double[] getActuals() {
 
-		double[] retInputs = { actual[position] };
+		double[] retInputs = { actual.get(position) };
 
 		return retInputs;
 	}
 	
 	public void increment() {
-		if (position == inputs.length - 2) {
+		if (position == inputs.size() - 2) {
 			position = 0;
 		} else {
 			position++;
@@ -46,6 +47,10 @@ public class DataParserTester implements DataParser {
 	}
 
 	public void openFile(String tfileName) {
+		
+		inputs = new ArrayList<Double>();
+		actual = new ArrayList<Double>();
+		
 		try {
 			Scanner reader = new Scanner(new File(tfileName));
 
@@ -53,12 +58,12 @@ public class DataParserTester implements DataParser {
 
 			while (reader.hasNext()) {
 
-				inputs[i] = reader.nextDouble();
-				actual[i] = reader.nextDouble();
+				inputs.add(reader.nextDouble());
+				actual.add(reader.nextDouble());
 
 				i++;
 			}
-
+			reader.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -66,7 +71,7 @@ public class DataParserTester implements DataParser {
 	}
 
 	public int getDataLength() {
-		return inputs.length;
+		return inputs.size();
 	}
 
 }
