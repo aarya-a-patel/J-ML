@@ -107,6 +107,21 @@ public class Matrix {
 					+ "[" + Integer.toString(array.length) + "," + Integer.toString(array[0].length) + "]");
 		}
 	}
+	
+	public void ReferencedAdd(Matrix addend) throws InvalidMatrixDimensionsException {
+		try {
+			for (int i = 0; i < addend.width(); i++) {
+				for (int j = 0; j < addend.height(); j++) {
+					array[i][j] -= addend.getArray(i, j);
+				}
+			}
+		} catch (Exception e) {
+			throw new InvalidMatrixDimensionsException(
+					"Size Mismatch-  Input: " + "[" + Integer.toString(addend.width()) + ","
+							+ Integer.toString(addend.height()) + "] -- Class Array: " + "["
+							+ Integer.toString(array.length) + "," + Integer.toString(array[0].length) + "]");
+		}
+	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 
