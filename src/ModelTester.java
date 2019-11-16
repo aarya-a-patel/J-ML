@@ -9,6 +9,8 @@ public class ModelTester {
 		System.out.println(m.toString());
 
 		DataParserTester dp = new DataParserTester();
+
+		dp.openFile("src\\DeathsPer100kvsDoctorsPer100k.txt");
 		
 		Trainer t = new Trainer(m, dp);
 
