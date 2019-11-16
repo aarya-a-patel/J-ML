@@ -25,7 +25,8 @@ public class DataParserTester implements DataParser {
 	@Override
 	public double[] parseData(int position) {
 
-		return null;
+		double[] array = {inputs[position] , actual[position]};
+		return array;
 	}
 	
 	public void openFile(String tfileName) {
@@ -37,7 +38,7 @@ public class DataParserTester implements DataParser {
 			while(reader.hasNext()) {
 			
 				inputs[i] = reader.nextDouble();
-				inputs[i] = reader.nextDouble();
+				actual[i] = reader.nextDouble();
 				
 				i++;
 			}
