@@ -3,7 +3,9 @@ package jml.trainer;
 public interface DataParser {
 	public int[] getBatches(String pathOfData);
 	public double[] getBatchData(int batchNumber);
-	public double[] parseData();
+	public double[] getInputs();
+	public double[] getActuals();
+	public void increment();
 	public void openFile(String fileName);
 	public int getDataLength();
 }

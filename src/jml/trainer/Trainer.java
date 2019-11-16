@@ -29,7 +29,9 @@ public class Trainer extends Model implements Runnable {
 	public void run() {
 		while (running) {
 			System.out.println("running -- Placeholder");
-			double[] input = data.parseData();
+			double[] input = data.getInputs();
+			double[] actual = data.getActuals();
+			data.increment();
 			this.feedForward(input);
 			this.makeChanges(input);
 			System.out.println(this.toString());
