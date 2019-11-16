@@ -46,7 +46,7 @@ public class Model {
 			squaredSum += Math.pow(predicted[i] - actual[i],2);
 		}
 		
-		return squaredSum / layers.length;
+		return squaredSum / predicted.length;
 		
 	}
 }
