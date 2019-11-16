@@ -86,8 +86,8 @@ public class Trainer extends Model implements Runnable {
 			
 			for (int j = 0; j < layers.length; j++) {
 				try {
-					layers[j].getWeights().ReferencedSubtract(weights[j]);
-					layers[j].getBiases().ReferencedSubtract(biases[j]);
+					layers[j].getWeights().ReferencedAdd(weights[j]);
+					layers[j].getBiases().ReferencedAdd(biases[j]);
 				} catch (InvalidMatrixDimensionsException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
