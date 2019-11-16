@@ -23,9 +23,15 @@ public class DataParserTester implements DataParser {
 	}
 
 	@Override
-	public double[] parseData(int position) {
+	public double[] parseData() {
 
 		double[] array = {inputs[position] , actual[position]};
+		if(position == inputs.length - 2) {
+			position = 0;
+		}
+		else {
+			position++;
+		}
 		return array;
 	}
 	

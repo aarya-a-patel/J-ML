@@ -10,7 +10,6 @@ public class Trainer extends Model implements Runnable {
 	private double[][] nodeOutputs;
 	private boolean running;
 	private Thread thread;
-	private int readPosition = 0;
 
 	public Trainer(Model model, DataParser data) {
 		super(model);
@@ -30,8 +29,7 @@ public class Trainer extends Model implements Runnable {
 	public void run() {
 		while (running) {
 			System.out.println("running -- Placeholder");
-			double[] input = data.parseData(readPosition);
-			readPosition++;
+			double[] input = data.parseData();
 			this.feedForward(input);
 			this.makeChanges(input);
 			System.out.println(this.toString());
