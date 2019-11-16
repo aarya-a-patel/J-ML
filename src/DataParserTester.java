@@ -1,7 +1,15 @@
 import jml.trainer.DataParser;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Scanner;
 
 public class DataParserTester implements DataParser {
-
+	
+	private double[] inputs;
+	private double[] actual;
+	private int position = 0;
+	
 	@Override
 	public int[] getBatches(String pathOfData) {
 		// TODO Auto-generated method stub
@@ -15,9 +23,29 @@ public class DataParserTester implements DataParser {
 	}
 
 	@Override
-	public double[] parseData(int batchNumber) {
-		// TODO Auto-generated method stub
+	public double[] parseData(int position) {
+
 		return null;
+	}
+	
+	public void openFile(String tfileName) {
+		try {
+			Scanner reader = new Scanner(new File(tfileName));
+			
+			int i = 0;
+			
+			while(reader.hasNext()) {
+			
+				inputs[i] = reader.nextDouble();
+				inputs[i] = reader.nextDouble();
+				
+				i++;
+			}
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
