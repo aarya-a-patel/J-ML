@@ -47,5 +47,9 @@ public class DataParserTester implements DataParser {
 			e.printStackTrace();
 		}
 	}
+	
+	public int getDataLength() {
+		return inputs.length;
+	}
 
 }

@@ -5,4 +5,5 @@ public interface DataParser {
 	public double[] getBatchData(int batchNumber);
 	public double[] parseData(int position);
 	public void openFile(String fileName);
+	public int getDataLength();
 }
