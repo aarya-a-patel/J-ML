@@ -37,7 +37,8 @@ public class Trainer extends Model implements Runnable {
 			System.out.println("Error: " + totalError);
 			System.out.println("Predicted: " + predicted.toString());
 			System.out.println("Actual: " + data.getActuals().toString());
-			System.out.println(layers[1].toString());
+			for (int l = 1; l < layers.length; l++)
+				System.out.println(layers[l].toString());
 
 			this.makeChanges(data.getActuals());
 			data.increment();
@@ -85,7 +86,8 @@ public class Trainer extends Model implements Runnable {
 
 		for (int j = 1; j < layers.length; j++) {
 			try {
-				layers[j].setWeights(Matrix.subtract(layers[j].getWeights(), Matrix.multiply(learningRate, weights[j])));
+				layers[j]
+						.setWeights(Matrix.subtract(layers[j].getWeights(), Matrix.multiply(learningRate, weights[j])));
 				layers[j].setBiases(Matrix.subtract(layers[j].getBiases(), Matrix.multiply(learningRate, biases[j])));
 			} catch (InvalidMatrixDimensionsException e) {
 				e.printStackTrace();
