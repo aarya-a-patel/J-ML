@@ -6,7 +6,7 @@ public class ModelTester {
 		int[] nodes = { 1, 1 };
 		Model m = new Model(nodes);
 
-		System.out.println(m.toString());
+		//System.out.println(m.toString());
 
 		DataParserTester dp = new DataParserTester();
 
