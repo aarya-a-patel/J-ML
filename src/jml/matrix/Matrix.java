@@ -3,9 +3,7 @@ package jml.matrix;
 import jml.matrix.exceptions.InvalidMatrixDimensionsException;
 
 public class Matrix {
-	private double array[][];
-
-	// ----------------------------------------------------------------------------------------------------------------------------
+	private double[][] array;
 
 	// Default Constructor of empty 1x1 matrix
 	public Matrix() {
@@ -15,6 +13,12 @@ public class Matrix {
 	// Creates empty Matrix with Dimensions of (width, height)
 	public Matrix(final int width, final int height) {
 		array = new double[width][height];
+		
+		for (int x = 0; x < this.width(); x++) {
+			for (int y = 0; y < this.height(); y++) {
+				array[x][y] = 0;
+			}
+		}
 	}
 
 	/*
@@ -36,11 +40,9 @@ public class Matrix {
 	}
 
 	// Basic Copy constructor
-	public Matrix(Matrix m) {
+	public Matrix(MatrixOld m) {
 		array = m.getArray().clone();
 	}
-
-	// ----------------------------------------------------------------------------------------------------------------------------
 
 	// Returns Matrix width (x)
 	public int width() {
@@ -52,315 +54,86 @@ public class Matrix {
 		return array[0].length;
 	}
 
-	// ----------------------------------------------------------------------------------------------------------------------------
-
-	// Returns scalar addition of each element of Matrix by double addition
-
-	public Matrix Add(double addend) {
-		double[][] returnArray = array;
-		for (int i = 0; i < array.length; i++) {
-			for (int j = 0; j < array[0].length; j++) {
-				returnArray[i][j] += addend;
-			}
-		}
-		return new Matrix(returnArray);
+	// Returns a copy of the array inside Matrix class
+	public double[][] getArray() {
+		return array.clone();
 	}
 
-	/*
-	 * Adds each element of Matrix by equivalent element in addition array Arrays w/
-	 * x or y sizes greater than Matrix objects will throw error Arrays w/ x or y
-	 * sizes less than Matrix object will perform action and leave remaining Matrix
-	 * elements the same
-	 */
-	public Matrix Add(double[][] addend) throws InvalidMatrixDimensionsException {
+	// -------------------------------------------------------------------------------------------------------------
+	// Static functions
+	
+	
+	/** 
+	 * Adds two Matrices and returns the sum
+	*/
+	public static Matrix add(Matrix m1, Matrix m2) throws InvalidMatrixDimensionsException {
 
-		double[][] returnArray = this.getArray();
+		if (m1.width() < m2.width() || m1.height() < m2.height()) {
+			throw new InvalidMatrixDimensionsException("Matrix 2 is bigger than Matrix 1 -- Cannot Add");
+		}
 
-		try {
-			for (int i = 0; i < addend.length; i++) {
-				for (int j = 0; j < addend[0].length; j++) {
-					returnArray[i][j] += addend[i][j];
+		double[][] a1 = m1.getArray();
+		double[][] a2 = m2.getArray();
+		double[][] out = new double[m1.width()][m1.height()];
+		
+		for (int x = 0; x < m1.width(); x++) {
+			for (int y = 0; y < m1.height(); y++) {
+				if (x < m2.width() && y < m2.height()) {
+					out[x][y] = a1[x][y] + a2[x][y];
+				} else {
+					out[x][y] = a1[x][y];
 				}
 			}
-			return new Matrix(returnArray);
-		} catch (Exception e) {
-			throw new InvalidMatrixDimensionsException("Size Mismatch-  Input: " + "[" + Integer.toString(addend.length)
-					+ "," + Integer.toString(addend[0].length) + "] -- Class Array: " + "["
-					+ Integer.toString(array.length) + "," + Integer.toString(array[0].length) + "]");
 		}
-	}
-
-	public Matrix Add(Matrix addend) throws InvalidMatrixDimensionsException {
-
-		double[][] returnArray = this.getArray();
-
-		try {
-			for (int i = 0; i < addend.width(); i++) {
-				for (int j = 0; j < addend.height(); j++) {
-					returnArray[i][j] += addend.getArray(i, j);
-				}
-			}
-			return new Matrix(returnArray);
-		} catch (Exception e) {
-			throw new InvalidMatrixDimensionsException("Size Mismatch-  Input: " + "["
-					+ Integer.toString(addend.width()) + "," + Integer.toString(addend.height()) + "] -- Class Array: "
-					+ "[" + Integer.toString(array.length) + "," + Integer.toString(array[0].length) + "]");
-		}
+		return new Matrix(out);
 	}
 	
-	public void ReferencedAdd(Matrix addend) throws InvalidMatrixDimensionsException {
-		try {
-			for (int i = 0; i < addend.width(); i++) {
-				for (int j = 0; j < addend.height(); j++) {
-					array[i][j] -= addend.getArray(i, j);
-				}
-			}
-		} catch (Exception e) {
-			throw new InvalidMatrixDimensionsException(
-					"Size Mismatch-  Input: " + "[" + Integer.toString(addend.width()) + ","
-							+ Integer.toString(addend.height()) + "] -- Class Array: " + "["
-							+ Integer.toString(array.length) + "," + Integer.toString(array[0].length) + "]");
+	/** 
+	 * Finds the difference between two Matrices and returns the difference
+	*/
+	public static Matrix subtract(Matrix m1, Matrix m2) throws InvalidMatrixDimensionsException {
+
+		if (m1.width() < m2.width() || m1.height() < m2.height()) {
+			throw new InvalidMatrixDimensionsException("Matrix 2 is bigger than Matrix 1 -- Cannot Subtract");
 		}
-	}
 
-	// ----------------------------------------------------------------------------------------------------------------------------
-
-	// Returns scalar subtraction of each element of Matrix by double subtraction
-	public Matrix Subtract(double subtractor) {
-		double[][] returnArray = array;
-		for (int i = 0; i < array.length; i++) {
-			for (int j = 0; j < array[0].length; j++) {
-				returnArray[i][j] -= subtractor;
-			}
-		}
-		return new Matrix(returnArray);
-	}
-
-	/*
-	 * Subtracts each element of Matrix by equivalent element in addition array
-	 * Arrays w/ x or y sizes greater than Matrix objects will throw error Arrays w/
-	 * x or y sizes less than Matrix object will perform action and leave remaining
-	 * Matrix elements the same
-	 */
-	public Matrix Subtract(double[][] subtractor) throws InvalidMatrixDimensionsException {
-
-		double[][] returnArray = this.getArray();
-
-		try {
-			for (int i = 0; i < subtractor.length; i++) {
-				for (int j = 0; j < subtractor[0].length; j++) {
-					returnArray[i][j] -= subtractor[i][j];
-				}
-			}
-			return new Matrix(returnArray);
-		} catch (Exception e) {
-			throw new InvalidMatrixDimensionsException(
-					"Size Mismatch-  Input: " + "[" + Integer.toString(subtractor.length) + ","
-							+ Integer.toString(subtractor[0].length) + "] -- Class Array: " + "["
-							+ Integer.toString(array.length) + "," + Integer.toString(array[0].length) + "]");
-		}
-	}
-
-	public Matrix Subtract(Matrix subtractor) throws InvalidMatrixDimensionsException {
-
-		double[][] returnArray = this.getArray();
-
-		try {
-			for (int i = 0; i < subtractor.width(); i++) {
-				for (int j = 0; j < subtractor.height(); j++) {
-					returnArray[i][j] -= subtractor.getArray(i, j);
-				}
-			}
-			return new Matrix(returnArray);
-		} catch (Exception e) {
-			throw new InvalidMatrixDimensionsException(
-					"Size Mismatch-  Input: " + "[" + Integer.toString(subtractor.width()) + ","
-							+ Integer.toString(subtractor.height()) + "] -- Class Array: " + "["
-							+ Integer.toString(array.length) + "," + Integer.toString(array[0].length) + "]");
-		}
-	}
-
-	public void ReferencedSubtract(Matrix subtractor) throws InvalidMatrixDimensionsException {
-		try {
-			for (int i = 0; i < subtractor.width(); i++) {
-				for (int j = 0; j < subtractor.height(); j++) {
-					array[i][j] -= subtractor.getArray(i, j);
-				}
-			}
-		} catch (Exception e) {
-			throw new InvalidMatrixDimensionsException(
-					"Size Mismatch-  Input: " + "[" + Integer.toString(subtractor.width()) + ","
-							+ Integer.toString(subtractor.height()) + "] -- Class Array: " + "["
-							+ Integer.toString(array.length) + "," + Integer.toString(array[0].length) + "]");
-		}
-	}
-
-	// ----------------------------------------------------------------------------------------------------------------------------
-
-	// Returns scalar multiplication of each element of Matrix by double
-	// multiplication
-	public Matrix ScalarMultiply(double multiplier) {
-		double[][] returnArray = array;
-		for (int i = 0; i < array.length; i++) {
-			for (int j = 0; j < array[0].length; j++) {
-				returnArray[i][j] *= multiplier;
-			}
-		}
-		return new Matrix(returnArray);
-	}
-
-	/*
-	 * Subtracts each element of Matrix by equivalent element in addition array
-	 * Arrays w/ x or y sizes greater than Matrix objects will throw error Arrays w/
-	 * x or y sizes less than Matrix object will perform action and leave remaining
-	 * Matrix elements the same
-	 */
-	public Matrix ScalarMultiply(double[][] multiplier) throws InvalidMatrixDimensionsException {
-
-		double[][] returnArray = this.getArray();
-
-		try {
-			for (int i = 0; i < multiplier.length; i++) {
-				for (int j = 0; j < multiplier[0].length; j++) {
-					returnArray[i][j] *= multiplier[i][j];
-				}
-			}
-			return new Matrix(returnArray);
-		} catch (Exception e) {
-			throw new InvalidMatrixDimensionsException(
-					"Size Mismatch-  Input: " + "[" + Integer.toString(multiplier.length) + ","
-							+ Integer.toString(multiplier[0].length) + "] -- Class Array: " + "["
-							+ Integer.toString(array.length) + "," + Integer.toString(array[0].length) + "]");
-		}
-	}
-
-	public Matrix ScalarMultiply(Matrix multiplier) throws InvalidMatrixDimensionsException {
-
-		double[][] returnArray = this.getArray();
-
-		try {
-			for (int i = 0; i < multiplier.width(); i++) {
-				for (int j = 0; j < multiplier.height(); j++) {
-					returnArray[i][j] *= multiplier.getArray(i, j);
-				}
-			}
-			return new Matrix(returnArray);
-		} catch (Exception e) {
-			throw new InvalidMatrixDimensionsException(
-					"Size Mismatch-  Input: " + "[" + Integer.toString(multiplier.width()) + ","
-							+ Integer.toString(multiplier.height()) + "] -- Class Array: " + "["
-							+ Integer.toString(array.length) + "," + Integer.toString(array[0].length) + "]");
-		}
-	}
-
-	// ----------------------------------------------------------------------------------------------------------------------------
-
-	// Returns dot multiplications of the two matrices
-
-	public Matrix Multiply(double[][] multiplier) throws InvalidMatrixDimensionsException {
-		if (this.height() == multiplier.length) {
-			double[][] returnArray = new double[this.width()][multiplier[0].length];
-			for (int i = 0; i < this.width(); i++) {
-				for (int j = 0; j < multiplier[0].length; j++) {
-					for (int k = 0; k < this.height(); k++) {
-						returnArray[i][j] += array[i][k] * multiplier[k][j];
-					}
-				}
-			}
-			return new Matrix(returnArray);
-		} else {
-			throw new InvalidMatrixDimensionsException(
-					"Size Mismatch-  Input: " + "[" + Integer.toString(multiplier.length) + ","
-							+ Integer.toString(multiplier[0].length) + "] -- Class Array: " + "["
-							+ Integer.toString(array.length) + "," + Integer.toString(array[0].length) + "]");
-		}
-	}
-
-	public Matrix Multiply(Matrix multiplier) throws InvalidMatrixDimensionsException {
-		if (this.height() == multiplier.width()) {
-			double[][] returnArray = new double[this.width()][multiplier.height()];
-			for (int i = 0; i < this.width(); i++) {
-				for (int j = 0; j < multiplier.height(); j++) {
-					for (int k = 0; k < this.height(); k++) {
-						returnArray[i][j] += array[i][k] * multiplier.getArray(k, j);
-					}
-				}
-			}
-			return new Matrix(returnArray);
-		} else {
-			throw new InvalidMatrixDimensionsException(
-					"Size Mismatch-  Input: " + "[" + Integer.toString(multiplier.width()) + ","
-							+ Integer.toString(multiplier.height()) + "] -- Class Array: " + "["
-							+ Integer.toString(array.length) + "," + Integer.toString(array[0].length) + "]");
-		}
-	}
-
-	// ----------------------------------------------------------------------------------------------------------------------------
-
-	// Returns Transposed Array w/ size (y,x) from Matrix Object size of (x,y)
-	public Matrix Transpose() {
-		double[][] returnArray = new double[array[0].length][array.length];
-		for (int i = 0; i < array.length; i++) {
-			for (int j = 0; j < array[0].length; j++) {
-				returnArray[j][i] = array[i][j];
-			}
-		}
-		return new Matrix(returnArray);
-	}
-
-	// ----------------------------------------------------------------------------------------------------------------------------
-
-	// Returns double array in Class
-	public double[][] getArray() {
-		return array;
-	}
-
-	// Returns Matrix element at position (x,y)
-	public double getArray(int x, int y) {
-		try {
-			return array[x][y];
-		} catch (Exception e) {
-			throw new IllegalArgumentException("Size Mismatch-  Input: " + "[" + Integer.toString(x) + ","
-					+ Integer.toString(y) + "] -- Class Array: " + "[" + Integer.toString(array.length) + ","
-					+ Integer.toString(array[0].length) + "]");
-		}
-	}
-
-	// Sets Matrix element at position (x,y)
-	public void setArray(int x, int y, double element) {
-		array[x][y] = element;
-	}
-
-	// ----------------------------------------------------------------------------------------------------------------------------
-
-	// Returns formated String of Matrix object, with each ordered element and row
-	public String toString() {
-		String returnString = "\n\n          [";
-		for (int i = 0; i < array.length; i++) {
-			if (i == 0) {
-				returnString += "[";
-			} else {
-				returnString += "           [";
-			}
-			for (int j = 0; j < array[0].length - 1; j++) {
-				if (array[i][j] >= 10) {
-					returnString += Double.toString(array[i][j]) + ", ";
+		double[][] a1 = m1.getArray();
+		double[][] a2 = m2.getArray();
+		double[][] out = new double[m1.width()][m1.height()];
+		
+		for (int x = 0; x < m1.width(); x++) {
+			for (int y = 0; y < m1.height(); y++) {
+				if (x < m2.width() && y < m2.height()) {
+					out[x][y] = a1[x][y] - a2[x][y];
 				} else {
-					returnString += Double.toString(array[i][j]) + ",  ";
+					out[x][y] = a1[x][y];
 				}
 			}
-			if (array[i][array[0].length - 1] >= 10) {
-				returnString += Double.toString(array[i][array[0].length - 1]) + "],\n";
-			} else {
-				returnString += Double.toString(array[i][array[0].length - 1]) + " ],\n";
+		}
+		return new Matrix(out);
+	}
+	
+	/** 
+	 * Finds the product of two Matrices and returns it
+	*/
+	public static Matrix multiply(Matrix m1, Matrix m2) throws InvalidMatrixDimensionsException {
+
+		if (m1.width() != m2.height()) {
+			throw new InvalidMatrixDimensionsException("Matrix 2 is bigger than Matrix 1 -- Cannot Multiply");
+		}
+
+		double[][] a1 = m1.getArray();
+		double[][] a2 = m2.getArray();
+		double[][] out = new double[m2.width()][m1.height()];
+		
+		for (int x2 = 0; x2 < m2.width(); x2++) {
+			for (int x1 = 0; x1 < m1.width(); x1++) {
+				for (int y = 0; y < m1.height(); y++) {
+					out[x2][y] += a1[x1][y] * a2[x2][x1];
+				}
 			}
 		}
 
-		returnString = returnString.substring(0, returnString.length() - 2) + ']'
-				+ returnString.substring(returnString.length() - 1 + 1);
-
-		returnString += "\n\n";
-
-		return returnString;
+		return new Matrix(out);
 	}
 }
