@@ -3,7 +3,7 @@ import jml.trainer.Trainer;
 
 public class ModelTester {
 	public static void main(String[] args) {
-		int[] nodes = { 1, 1 };
+		int[] nodes = { 1, 1, 1 };
 		Model m = new Model(nodes, false);
 
 		//System.out.println(m.toString());

@@ -191,4 +191,19 @@ public class Matrix {
 
 		return new Matrix(out);
 	}
+	
+
+	/**
+	 *  Returns Transposed Array w/ size (y,x) from Matrix Object size of (x,y)
+	 */
+	public static Matrix transpose(Matrix m) {
+		double[][] returnArray = new double[m.height()][m.width()];
+		for (int i = 0; i < m.width(); i++) {
+			for (int j = 0; j < m.height(); j++) {
+				returnArray[j][i] = m.getArray()[i][j];
+			}
+		}
+		return new Matrix(returnArray);
+	}
+
 }
