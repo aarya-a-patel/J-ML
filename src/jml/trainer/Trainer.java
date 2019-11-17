@@ -60,7 +60,7 @@ public class Trainer extends Model implements Runnable {
 
 		try {
 			baseDerivative = Matrix.multiply(getNodeSigmoidDerivative(l), getCostDerivative(actual, nodeOutputs[l]));
-			weights[l] = Matrix.multiply(getWeightDerivative(l), baseDerivative);
+			weights[l] = Matrix.layerMultiply(getWeightDerivative(l), baseDerivative);
 			biases[l] = new Matrix(baseDerivative);
 		} catch (InvalidMatrixDimensionsException e) {
 			e.printStackTrace();
@@ -73,7 +73,7 @@ public class Trainer extends Model implements Runnable {
 			try {
 				currDerivative = Matrix.multiply(getNodeSigmoidDerivative(l),
 						Matrix.multiply(getPrevNodeDerivative(l), baseDerivative));
-				weights[l] = Matrix.multiply(getWeightDerivative(l), currDerivative);
+				weights[l] = Matrix.layerMultiply(getWeightDerivative(l), currDerivative);
 				biases[l] = new Matrix(currDerivative);
 			} catch (InvalidMatrixDimensionsException e) {
 				e.printStackTrace();
@@ -117,7 +117,7 @@ public class Trainer extends Model implements Runnable {
 	}
 
 	public Matrix getWeightDerivative(int layerNum) {
-		return Matrix.makeDiagonal(nodeOutputs[layerNum - 1].getArray()[0]);
+		return nodeOutputs[layerNum - 1];
 	}
 
 	public Matrix getNodeSigmoidDerivative(int layerNum) {

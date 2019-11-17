@@ -132,7 +132,7 @@ public class Matrix {
 	public static Matrix multiply(Matrix m1, Matrix m2) throws InvalidMatrixDimensionsException {
 
 		if (m1.width() != m2.height()) {
-			throw new InvalidMatrixDimensionsException("Matrix 2 is bigger than Matrix 1 -- Cannot Multiply");
+			throw new InvalidMatrixDimensionsException("Matrix 2 doesn't match Matrix 1 -- Cannot Multiply");
 		}
 
 		double[][] a1 = m1.getArray();
@@ -167,6 +167,33 @@ public class Matrix {
 	}
 
 	/**
+	 * Experimental version of multiply for edge cases.
+	 */
+	public static Matrix layerMultiply(Matrix m1, Matrix m2) throws InvalidMatrixDimensionsException {
+
+		if (m1.width() != m2.width()) {
+			throw new InvalidMatrixDimensionsException("Matrix 2 doesn't match Matrix 1 -- Cannot Multiply");
+		}
+
+		double[][] a1 = m1.getArray();
+		double[][] a2 = m2.getArray();
+		double[][] out = new double[m2.width()][m2.height()];
+		for (int x = 0; x < m2.width(); x++) {
+			for (int y = 0; y < m2.height(); y++) {
+				int sum = 0;
+
+				for (int yy = 0; yy < m1.height(); yy++) {
+					sum += a1[x][yy] * a2[x][y];
+				}
+
+				out[x][y] = sum;
+			}
+		}
+
+		return new Matrix(out);
+	}
+
+	/**
 	 * Input a 1 dimensional array into the Matrix diagonally
 	 */
 
@@ -191,10 +218,9 @@ public class Matrix {
 
 		return new Matrix(out);
 	}
-	
 
 	/**
-	 *  Returns Transposed Array w/ size (y,x) from Matrix Object size of (x,y)
+	 * Returns Transposed Array w/ size (y,x) from Matrix Object size of (x,y)
 	 */
 	public static Matrix transpose(Matrix m) {
 		double[][] returnArray = new double[m.height()][m.width()];
