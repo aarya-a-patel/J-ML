@@ -48,6 +48,8 @@ public class Model {
 			squaredSum += Math.pow(predicted.getArray()[0][i] - actual.getArray()[0][i],2);
 		}
 		
+		System.out.println(predicted.toString());
+		
 		return squaredSum / predicted.height();
 		
 	}
