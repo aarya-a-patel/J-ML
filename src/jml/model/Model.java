@@ -6,16 +6,16 @@ public class Model {
 	protected Layer[] layers;
 	protected boolean useSigmoid;
 
-	public Model(final int layerSizes[]) {
+	public Model(final int layerSizes[], boolean useSigmoid) {
 		layers = new Layer[layerSizes.length];
 		layers[0] = new InputLayer(layerSizes[0]);
 
 		for (int i = 1; i < layerSizes.length; i++) {
-			layers[i] = new Layer(layerSizes[i], layerSizes[i - 1]);
+			layers[i] = new Layer(layerSizes[i], layerSizes[i - 1], useSigmoid);
 
 		}
 		
-		useSigmoid = false;
+		this.useSigmoid = useSigmoid;
 	}
 
 	public Model(Model model) {
