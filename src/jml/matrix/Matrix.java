@@ -15,7 +15,7 @@ public class Matrix {
 	// Creates empty Matrix with Dimensions of (width, height)
 	public Matrix(final int width, final int height) {
 		array = new double[width][height];
-		
+
 		for (int x = 0; x < this.width(); x++) {
 			for (int y = 0; y < this.height(); y++) {
 				array[x][y] = 0;
@@ -29,7 +29,7 @@ public class Matrix {
 	 */
 	public Matrix(final int width, final int height, double range) {
 		Random rand = new Random();
-		
+
 		array = new double[width][height];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
@@ -62,7 +62,7 @@ public class Matrix {
 	public double[][] getArray() {
 		return array.clone();
 	}
-	
+
 	public String toString() {
 		String out = "";
 		for (int y = 0; y < height(); y++) {
@@ -74,14 +74,13 @@ public class Matrix {
 		}
 		return out;
 	}
-	
+
 	// -------------------------------------------------------------------------------------------------------------
 	// Static functions
-	
-	
-	/** 
+
+	/**
 	 * Adds two Matrices and returns the sum
-	*/
+	 */
 	public static Matrix add(Matrix m1, Matrix m2) throws InvalidMatrixDimensionsException {
 
 		if (m1.width() < m2.width() || m1.height() < m2.height()) {
@@ -91,7 +90,7 @@ public class Matrix {
 		double[][] a1 = m1.getArray();
 		double[][] a2 = m2.getArray();
 		double[][] out = new double[m1.width()][m1.height()];
-		
+
 		for (int x = 0; x < m1.width(); x++) {
 			for (int y = 0; y < m1.height(); y++) {
 				if (x < m2.width() && y < m2.height()) {
@@ -103,10 +102,10 @@ public class Matrix {
 		}
 		return new Matrix(out);
 	}
-	
-	/** 
+
+	/**
 	 * Finds the difference between two Matrices and returns the difference
-	*/
+	 */
 	public static Matrix subtract(Matrix m1, Matrix m2) throws InvalidMatrixDimensionsException {
 
 		if (m1.width() < m2.width() || m1.height() < m2.height()) {
@@ -116,7 +115,7 @@ public class Matrix {
 		double[][] a1 = m1.getArray();
 		double[][] a2 = m2.getArray();
 		double[][] out = new double[m1.width()][m1.height()];
-		
+
 		for (int x = 0; x < m1.width(); x++) {
 			for (int y = 0; y < m1.height(); y++) {
 				if (x < m2.width() && y < m2.height()) {
@@ -128,10 +127,10 @@ public class Matrix {
 		}
 		return new Matrix(out);
 	}
-	
-	/** 
+
+	/**
 	 * Finds the product of two Matrices and returns it
-	*/
+	 */
 	public static Matrix multiply(Matrix m1, Matrix m2) throws InvalidMatrixDimensionsException {
 
 		if (m1.width() != m2.height()) {
@@ -141,7 +140,7 @@ public class Matrix {
 		double[][] a1 = m1.getArray();
 		double[][] a2 = m2.getArray();
 		double[][] out = new double[m2.width()][m1.height()];
-		
+
 		for (int x2 = 0; x2 < m2.width(); x2++) {
 			for (int x1 = 0; x1 < m1.width(); x1++) {
 				for (int y = 0; y < m1.height(); y++) {
@@ -152,14 +151,14 @@ public class Matrix {
 
 		return new Matrix(out);
 	}
-	
-	/** 
+
+	/**
 	 * Finds the product of a Matrix and a number
-	*/
-	public static Matrix multiply(double s, Matrix m){
+	 */
+	public static Matrix multiply(double s, Matrix m) {
 		double[][] a = m.getArray();
 		double[][] out = new double[m.width()][m.height()];
-		
+
 		for (int x = 0; x < m.width(); x++) {
 			for (int y = 0; y < m.height(); y++) {
 				out[x][y] = a[x][y] * s;
@@ -168,18 +167,30 @@ public class Matrix {
 
 		return new Matrix(out);
 	}
-	
+
 	/**
 	 * Input a 1 dimensional array into the Matrix diagonally
 	 */
-	
+
 	public static Matrix makeDiagonal(double[] d) {
 		double[][] out = new double[d.length][d.length];
-		
+
 		for (int i = 0; i < d.length; i++) {
 			out[i][i] = d[i];
 		}
-		
+
+		return new Matrix(out);
+	}
+
+	public static Matrix applySigmoid(Matrix m) {
+		double[][] out = new double[m.width()][m.height()];
+
+		for (int x = 0; x < m.width(); x++) {
+			for (int y = 0; y < m.height(); y++) {
+				out[x][y] = 1 / (1 + Math.pow(Math.E, -1 * m.getArray()[x][y]));
+			}
+		}
+
 		return new Matrix(out);
 	}
 }

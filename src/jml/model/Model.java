@@ -14,15 +14,15 @@ public class Model {
 
 		}
 	}
-	
+
 	public Model(Model model) {
 		this.layers = model.getLayers();
 	}
-	
+
 	public Layer[] getLayers() {
 		return this.layers;
 	}
-	
+
 	public Matrix feedForward(Matrix inputs) {
 		Matrix out = inputs;
 		for (int i = 0; i < layers.length; i++) {
@@ -30,25 +30,25 @@ public class Model {
 		}
 		return out;
 	}
-	
+
 	public String toString() {
 		String returnString = "\n\n";
-		for(int i = 0; i < layers.length; i++) {
-			returnString += "\nLayer " + Integer.toString(i+1) + ":   " + layers[i].toString();
+		for (int i = 0; i < layers.length; i++) {
+			returnString += "\nLayer " + Integer.toString(i + 1) + ":   " + layers[i].toString();
 		}
 		returnString += "\n\n";
 		return returnString;
 	}
-	
+
 	public double calculateError(Matrix predicted, Matrix actual) {
-		
+
 		double squaredSum = 0;
-		
+
 		for (int i = 0; i < predicted.height(); i++) {
-			squaredSum += Math.pow(predicted.getArray()[0][i] - actual.getArray()[0][i],2);
+			squaredSum += Math.pow(predicted.getArray()[0][i] - actual.getArray()[0][i], 2);
 		}
-		
+
 		return squaredSum / predicted.height();
-		
+
 	}
 }

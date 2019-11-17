@@ -27,31 +27,27 @@ public class DataParserTester implements DataParser {
 	@Override
 	public Matrix getInputs() {
 
-		double[][] retInputs = {{ inputs.get(position) }};
+		double[][] retInputs = { { inputs.get(position) } };
 
 		return new Matrix(retInputs);
 	}
 
 	public Matrix getActuals() {
 
-		double[][] retInputs = {{ actual.get(position) }};
+		double[][] retInputs = { { actual.get(position) } };
 
 		return new Matrix(retInputs);
 	}
-	
+
 	public void increment() {
-		if (position == inputs.size() - 2) {
-			position = 0;
-		} else {
-			position++;
-		}
+		position = (position + 1) % inputs.size();
 	}
 
 	public void openFile(String tfileName) {
-		
+
 		inputs = new ArrayList<Double>();
 		actual = new ArrayList<Double>();
-		
+
 		try {
 			Scanner reader = new Scanner(new File(tfileName));
 

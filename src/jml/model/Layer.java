@@ -22,7 +22,7 @@ public class Layer {
 	
 	public Matrix calculate(Matrix x) {
 		try {
-			return Matrix.add(Matrix.multiply(weights, x), biases);
+			return Matrix.applySigmoid(Matrix.add(Matrix.multiply(weights, x), biases));
 		} catch (InvalidMatrixDimensionsException e) {
 			e.printStackTrace();
 			
