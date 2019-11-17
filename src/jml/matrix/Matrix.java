@@ -40,7 +40,7 @@ public class Matrix {
 	}
 
 	// Basic Copy constructor
-	public Matrix(MatrixOld m) {
+	public Matrix(Matrix m) {
 		array = m.getArray().clone();
 	}
 
