@@ -4,6 +4,7 @@ import jml.matrix.Matrix;
 
 public class Model {
 	protected Layer[] layers;
+	protected boolean useSigmoid;
 
 	public Model(final int layerSizes[]) {
 		layers = new Layer[layerSizes.length];
@@ -13,6 +14,8 @@ public class Model {
 			layers[i] = new Layer(layerSizes[i], layerSizes[i - 1]);
 
 		}
+		
+		useSigmoid = false;
 	}
 
 	public Model(Model model) {
@@ -45,7 +48,7 @@ public class Model {
 		double squaredSum = 0;
 
 		for (int i = 0; i < predicted.height(); i++) {
-			squaredSum += Math.pow(predicted.getArray()[0][i] - actual.getArray()[0][i], 2);
+			squaredSum += Math.pow(actual.getArray()[0][i] - predicted.getArray()[0][i], 2);
 		}
 
 		return squaredSum / predicted.height();

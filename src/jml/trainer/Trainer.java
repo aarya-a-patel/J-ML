@@ -10,6 +10,7 @@ public class Trainer extends Model implements Runnable {
 	private Matrix[] nodeOutputs;
 	private boolean running;
 	private Thread thread;
+	private double learningRate = 0.0001;
 
 	public Trainer(Model model, DataParser data) {
 		super(model);
@@ -28,19 +29,22 @@ public class Trainer extends Model implements Runnable {
 
 	public void run() {
 		int test = 0;
-		
+
 		while (running) {
 
 			Matrix predicted = this.feedForward(data.getInputs());
 			double totalError = this.calculateError(predicted, data.getActuals());
-			System.out.println(totalError);
-			System.out.println(predicted.toString());
+			System.out.println("Error: " + totalError);
+			System.out.println("Predicted: " + predicted.toString());
+			System.out.println("Actual: " + data.getActuals().toString());
 			System.out.println(layers[1].toString());
 
 			this.makeChanges(data.getActuals());
 			data.increment();
-			running = test < 100000;
+			running = test < 500000;
 			test++;
+
+			System.out.println("\n");
 		}
 	}
 
@@ -65,16 +69,6 @@ public class Trainer extends Model implements Runnable {
 		for (--l; l > 0; l--) {
 			currDerivative = new Matrix(1, layers[l].getNumNodes());
 
-//			for (int n = 0; n < layers[l].getNumNodes(); n++) {
-//
-//				currDerivative.getArray()[0][n] = 0;
-//
-//				for (int p = 0; p < baseDerivative.height(); p++) {
-//					currDerivative.getArray()[0][n] += baseDerivative.getArray()[0][p]
-//							* getPrevNodeDerivative(l + 1, p, n) * getNodeDerivative(l).getArray()[n][n];
-//				}
-//			}
-
 			try {
 				currDerivative = Matrix.multiply(getNodeSigmoidDerivative(l),
 						Matrix.multiply(getPrevNodeDerivative(l), baseDerivative));
@@ -91,8 +85,8 @@ public class Trainer extends Model implements Runnable {
 
 		for (int j = 1; j < layers.length; j++) {
 			try {
-				layers[j].setWeights(Matrix.add(layers[j].getWeights(), weights[j]));
-				layers[j].setBiases(Matrix.add(layers[j].getBiases(), biases[j]));
+				layers[j].setWeights(Matrix.subtract(layers[j].getWeights(), Matrix.multiply(learningRate, weights[j])));
+				layers[j].setBiases(Matrix.subtract(layers[j].getBiases(), Matrix.multiply(learningRate, biases[j])));
 			} catch (InvalidMatrixDimensionsException e) {
 				e.printStackTrace();
 			}
@@ -113,7 +107,7 @@ public class Trainer extends Model implements Runnable {
 
 	public Matrix getCostDerivative(Matrix actual, Matrix predicted) {
 		try {
-			return Matrix.multiply(2, Matrix.subtract(predicted, actual));
+			return Matrix.multiply(-2, Matrix.subtract(actual, predicted));
 		} catch (InvalidMatrixDimensionsException e) {
 			e.printStackTrace();
 			return null;
@@ -128,18 +122,23 @@ public class Trainer extends Model implements Runnable {
 
 		double[] a = new double[layers[layerNum].getNumNodes()];
 
-		for (int nodeNum = 0; nodeNum < layers[layerNum].getNumNodes(); nodeNum++) {
-			double y = nodeOutputs[layerNum].getArray()[0][nodeNum];
-			double z = -1 * Math.log((1 / y) - 1);
-			a[nodeNum] = Math.pow(Math.E, -z) / Math.pow(1 + Math.pow(Math.E, -z), 2);
-			//System.out.println(z + "  " + y);
+		if (useSigmoid) {
+			for (int nodeNum = 0; nodeNum < layers[layerNum].getNumNodes(); nodeNum++) {
+				double y = nodeOutputs[layerNum].getArray()[0][nodeNum];
+				double z = -1 * Math.log((1 / y) - 1);
+				a[nodeNum] = Math.pow(Math.E, -z) / Math.pow(1 + Math.pow(Math.E, -z), 2);
+			}
+		} else {
+			for (int i = 0; i < a.length; i++) {
+				a[i] = 1;
+			}
 		}
 
 		return Matrix.makeDiagonal(a);
 	}
 
 	public Matrix getPrevNodeDerivative(int layerNum) {
-		return layers[layerNum].getWeights();// .getNode(nodeNum).getWeights()[prevNodeNum];
+		return layers[layerNum].getWeights();
 	}
 
 	public Matrix feedForward(Matrix inputs) {
