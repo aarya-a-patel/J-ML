@@ -32,6 +32,9 @@ public class Trainer extends Model implements Runnable {
 			Matrix predicted = this.feedForward(data.getInputs());
 			double totalError = this.calculateError(predicted, data.getActuals());
 			System.out.println(totalError);
+			
+			System.out.println(layers[1].toString());
+			
 			this.makeChanges(data.getActuals());
 			data.increment();
 			// running = false;
@@ -77,23 +80,17 @@ public class Trainer extends Model implements Runnable {
 				}
 			}
 
+			baseDerivative = currDerivative;
+			currDerivative = null;
+		}
+		
+		for (int j = 1; j < layers.length; j++) {
 			try {
-				weights[l] = Matrix.multiply(getWeightDerivative(l), currDerivative);
-				biases[l] = new Matrix(currDerivative);
-			} catch (InvalidMatrixDimensionsException e1) {
-				e1.printStackTrace();
-				return;
-			}
-
-			try {
-				layers[l].setWeights(Matrix.add(layers[l].getWeights(), weights[l]));
-				layers[l].setBiases(Matrix.add(layers[l].getBiases(), biases[l]));
+				layers[j].setWeights(Matrix.add(layers[j].getWeights(), weights[j]));
+				layers[j].setBiases(Matrix.add(layers[j].getBiases(), biases[j]));
 			} catch (InvalidMatrixDimensionsException e) {
 				e.printStackTrace();
 			}
-
-			baseDerivative = currDerivative;
-			currDerivative = null;
 		}
 	}
 
