@@ -1,5 +1,7 @@
 package jml.model;
 
+import jml.matrix.Matrix;
+
 public class Model {
 	protected Layer[] layers;
 
@@ -21,8 +23,8 @@ public class Model {
 		return this.layers;
 	}
 	
-	public double[] feedForward(double[] inputs) {
-		double[] out = inputs;
+	public Matrix feedForward(Matrix inputs) {
+		Matrix out = inputs;
 		for (int i = 0; i < layers.length; i++) {
 			out = layers[i].calculate(out);
 		}
@@ -38,15 +40,15 @@ public class Model {
 		return returnString;
 	}
 	
-	public double calculateError(double[] predicted, double[] actual) {
+	public double calculateError(Matrix predicted, Matrix actual) {
 		
 		double squaredSum = 0;
 		
-		for (int i = 0; i < predicted.length; i++) {
-			squaredSum += Math.pow(predicted[i] - actual[i],2);
+		for (int i = 0; i < predicted.height(); i++) {
+			squaredSum += Math.pow(predicted.getArray()[0][i] - actual.getArray()[0][i],2);
 		}
 		
-		return squaredSum / predicted.length;
+		return squaredSum / predicted.height();
 		
 	}
 }

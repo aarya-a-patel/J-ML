@@ -7,7 +7,7 @@ import jml.model.Model;
 public class Trainer extends Model implements Runnable {
 
 	private DataParser data;
-	private double[][] nodeOutputs;
+	private Matrix[] nodeOutputs;
 	private boolean running;
 	private Thread thread;
 
@@ -15,7 +15,7 @@ public class Trainer extends Model implements Runnable {
 		super(model);
 		this.data = data;
 		this.running = false;
-		this.nodeOutputs = new double[layers.length][];
+		this.nodeOutputs = new Matrix[layers.length];
 	}
 
 	public void start() {
@@ -28,11 +28,11 @@ public class Trainer extends Model implements Runnable {
 
 	public void run() {
 		while (running) {
-			double[] input = data.getInputs();
-			double[] actual = data.getActuals();
+			double[][] input = {data.getInputs()};
+			double[][] actual = {data.getActuals()};
 			data.increment();
-			System.out.println(this.calculateError(this.feedForward(input), actual));
-			this.makeChanges(actual);
+			System.out.println(this.calculateError(this.feedForward(new Matrix(input)), new Matrix(actual)));
+			this.makeChanges(actual[0]);
 		}
 	}
 
@@ -45,21 +45,21 @@ public class Trainer extends Model implements Runnable {
 
 		int l = layers.length - 1;
 
-		weights[l] = new Matrix(layers[l].getNumNodes(), layers[l].getNode(0).getWeights().length);
+		weights[l] = new Matrix(layers[l].getNumNodes(), layers[l].getWeights().width());
 		biases[l] = new Matrix(layers[l].getNumNodes(), 1);
 
 		baseDerivative = new double[layers[l].getNumNodes()];
 
 		for (int n = 0; n < layers[l].getNumNodes(); n++) {
-			baseDerivative[n] = getCostDerivative(actual[n], nodeOutputs[l][n]) * getNodeDerivative(l, n);
-			for (int w = 0; w < layers[l].getNode(n).getWeights().length; w++) {
+			baseDerivative[n] = getCostDerivative(actual[n], nodeOutputs[l].getArray()[0][n]) * getNodeDerivative(l, n);
+			for (int w = 0; w < layers[l].getWeights().width(); w++) {
 				weights[l].getArray()[n][w] = baseDerivative[n] * getWeightDerivative(l, w);
 			}
 			biases[l].getArray()[n][0] = baseDerivative[n] * getBiasDerivative();
 		}
 
 		for (--l; l > 0; l--) {
-			weights[l] = new Matrix(layers[l].getNumNodes(), layers[l].getNode(0).getWeights().length);
+			weights[l] = new Matrix(layers[l].getNumNodes(), layers[l].getWeights().width());
 			biases[l] = new Matrix(layers[l].getNumNodes(), 1);
 
 			currDerivative = new double[layers[l].getNumNodes()];
@@ -76,18 +76,17 @@ public class Trainer extends Model implements Runnable {
 				currDerivative[n] /= baseDerivative.length;
 
 				// Compute Changes to weights and biases here or add to Matrix for change later
-				for (int w = 0; w < layers[l].getNode(n).getWeights().length; w++) {
+				for (int w = 0; w < layers[l].getWeights().width(); w++) {
 					weights[l].getArray()[n][w] = baseDerivative[n] * getWeightDerivative(l, w);
 				}
 				biases[l].getArray()[n][0] = baseDerivative[n] * getBiasDerivative();
 			}
 			
 			for (int j = 0; j < layers.length; j++) {
-				try {
-					layers[j].getWeights().ReferencedAdd(weights[j]);
-					layers[j].getBiases().ReferencedAdd(biases[j]);
+				try {					
+					layers[j].setWeights(Matrix.add(layers[j].getWeights(), weights[j]));
+					layers[j].setBiases(Matrix.add(layers[j].getBiases(), biases[j]));
 				} catch (InvalidMatrixDimensionsException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -118,21 +117,21 @@ public class Trainer extends Model implements Runnable {
 	}
 
 	public double getWeightDerivative(int layerNum, int weightNum) {
-		return nodeOutputs[layerNum - 1][weightNum];
+		return nodeOutputs[layerNum - 1].getArray()[0][weightNum];
 	}
 
 	public double getNodeDerivative(int layerNum, int nodeNum) {
-		double y = nodeOutputs[layerNum][nodeNum];
+		double y = nodeOutputs[layerNum].getArray()[0][nodeNum];
 		double z = -Math.log((1 - y) / y);
 		return Math.pow(Math.E, -z) / Math.pow(1 + Math.pow(Math.E, -z), 2);
 	}
 
 	public double getPrevNodeDerivative(int layerNum, int nodeNum, int prevNodeNum) {
-		return layers[layerNum].getNode(nodeNum).getWeights()[prevNodeNum];
+		return layers[layerNum].getWeights().getArray()[prevNodeNum][nodeNum];//.getNode(nodeNum).getWeights()[prevNodeNum];
 	}
 
-	public double[] feedForward(double[] inputs) {
-		double[] out = inputs;
+	public Matrix feedForward(Matrix inputs) {
+		Matrix out = inputs;
 		for (int i = 0; i < layers.length; i++) {
 			out = layers[i].calculate(out);
 			nodeOutputs[i] = out;

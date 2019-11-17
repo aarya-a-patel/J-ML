@@ -1,17 +1,15 @@
 package jml.model;
 
+import jml.matrix.Matrix;
+
 public class InputLayer extends Layer {
-	
-	public InputLayer(final int numInputs)  {
+
+	public InputLayer(final int numInputs) {
 		super();
-		nodes = new Node[numInputs];
-		for (int i = 0; i < numInputs	; i++) {
-			nodes[i] =  new Node(1);
-		}
 	}
-	
-	public double[] calculate(double[] previousLayerOutputs) {
+
+	public Matrix calculate(Matrix previousLayerOutputs) {
 		return previousLayerOutputs;
-		
+
 	}
 }
