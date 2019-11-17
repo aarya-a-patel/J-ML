@@ -33,6 +33,7 @@ public class Trainer extends Model implements Runnable {
 			data.increment();
 			System.out.println(this.calculateError(this.feedForward(new Matrix(input)), new Matrix(actual)));
 			this.makeChanges(new Matrix(actual));
+			running = false;
 		}
 	}
 
