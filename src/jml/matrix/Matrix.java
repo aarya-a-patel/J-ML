@@ -58,7 +58,19 @@ public class Matrix {
 	public double[][] getArray() {
 		return array.clone();
 	}
-
+	
+	public String toString() {
+		String out = "";
+		for (int y = 0; y < height(); y++) {
+			out += "[";
+			for (int x = 0; x < width(); x++) {
+				out += array[x][y] + " ";
+			}
+			out += "]";
+		}
+		return out;
+	}
+	
 	// -------------------------------------------------------------------------------------------------------------
 	// Static functions
 	
@@ -134,6 +146,36 @@ public class Matrix {
 			}
 		}
 
+		return new Matrix(out);
+	}
+	
+	/** 
+	 * Finds the product of a Matrix and a number
+	*/
+	public static Matrix multiply(double s, Matrix m){
+		double[][] a = m.getArray();
+		double[][] out = new double[m.width()][m.height()];
+		
+		for (int x = 0; x < m.width(); x++) {
+			for (int y = 0; y < m.height(); y++) {
+				out[x][y] = a[x][y] * s;
+			}
+		}
+
+		return new Matrix(out);
+	}
+	
+	/**
+	 * Input a 1 dimensional array into the Matrix diagonally
+	 */
+	
+	public static Matrix makeDiagonal(double[] d) {
+		double[][] out = new double[d.length][d.length];
+		
+		for (int i = 0; i < d.length; i++) {
+			out[i][i] = d[i];
+		}
+		
 		return new Matrix(out);
 	}
 }

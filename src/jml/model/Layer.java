@@ -12,8 +12,8 @@ public class Layer {
 	}
 	
 	public Layer(final int numNodes, final int previousLayer) {
-		weights = new Matrix(previousLayer, numNodes);
-		biases = new Matrix(1, numNodes);
+		weights = new Matrix(previousLayer, numNodes, 1);
+		biases = new Matrix(1, numNodes, 1);
 	}
 	
 	public int getNumNodes() {

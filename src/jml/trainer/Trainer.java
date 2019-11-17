@@ -28,67 +28,66 @@ public class Trainer extends Model implements Runnable {
 
 	public void run() {
 		while (running) {
-			double[][] input = {data.getInputs()};
-			double[][] actual = {data.getActuals()};
+			double[][] input = { data.getInputs() };
+			double[][] actual = { data.getActuals() };
 			data.increment();
 			System.out.println(this.calculateError(this.feedForward(new Matrix(input)), new Matrix(actual)));
-			this.makeChanges(actual[0]);
+			this.makeChanges(new Matrix(actual));
 		}
 	}
 
-	public void makeChanges(double[] actual) {
-		double[] baseDerivative;
-		double[] currDerivative;
+	public void makeChanges(Matrix actual) {
+		Matrix baseDerivative;
+		Matrix currDerivative;
 
 		Matrix[] weights = new Matrix[layers.length];
 		Matrix[] biases = new Matrix[layers.length];
 
 		int l = layers.length - 1;
 
-		weights[l] = new Matrix(layers[l].getNumNodes(), layers[l].getWeights().width());
-		biases[l] = new Matrix(layers[l].getNumNodes(), 1);
+		weights[l] = new Matrix(layers[l].getWeights().width(), layers[l].getNumNodes());
+		biases[l] = new Matrix(1, layers[l].getNumNodes());
 
-		baseDerivative = new double[layers[l].getNumNodes()];
+		baseDerivative = new Matrix(1, layers[l].getNumNodes());
 
-		for (int n = 0; n < layers[l].getNumNodes(); n++) {
-			baseDerivative[n] = getCostDerivative(actual[n], nodeOutputs[l].getArray()[0][n]) * getNodeDerivative(l, n);
-			for (int w = 0; w < layers[l].getWeights().width(); w++) {
-				weights[l].getArray()[n][w] = baseDerivative[n] * getWeightDerivative(l, w);
-			}
-			biases[l].getArray()[n][0] = baseDerivative[n] * getBiasDerivative();
+		try {
+			baseDerivative = Matrix.multiply(getNodeDerivative(l), getCostDerivative(actual, nodeOutputs[l]));
+			weights[l] = Matrix.multiply(getWeightDerivative(l), baseDerivative);
+			biases[l] = new Matrix(baseDerivative);
+		} catch (InvalidMatrixDimensionsException e1) {
+			e1.printStackTrace();
+			return;
 		}
 
 		for (--l; l > 0; l--) {
 			weights[l] = new Matrix(layers[l].getNumNodes(), layers[l].getWeights().width());
 			biases[l] = new Matrix(layers[l].getNumNodes(), 1);
 
-			currDerivative = new double[layers[l].getNumNodes()];
+			currDerivative = new Matrix(1, layers[l].getNumNodes());
 
 			for (int n = 0; n < layers[l].getNumNodes(); n++) {
 
-				currDerivative[n] = 0;
+				currDerivative.getArray()[0][n] = 0;
 
-				for (int p = 0; p < baseDerivative.length; p++) {
-					currDerivative[n] += baseDerivative[p] * getPrevNodeDerivative(l + 1, p, n)
-							* getNodeDerivative(l, n);
+				for (int p = 0; p < baseDerivative.height(); p++) {
+					currDerivative.getArray()[0][n] += baseDerivative.getArray()[0][p]
+							* getPrevNodeDerivative(l + 1, p, n) * getNodeDerivative(l).getArray()[n][n];
 				}
+			}
 
-				currDerivative[n] /= baseDerivative.length;
-
-				// Compute Changes to weights and biases here or add to Matrix for change later
-				for (int w = 0; w < layers[l].getWeights().width(); w++) {
-					weights[l].getArray()[n][w] = baseDerivative[n] * getWeightDerivative(l, w);
-				}
-				biases[l].getArray()[n][0] = baseDerivative[n] * getBiasDerivative();
+			try {
+				weights[l] = Matrix.multiply(getWeightDerivative(l), currDerivative);
+				biases[l] = new Matrix(currDerivative);
+			} catch (InvalidMatrixDimensionsException e1) {
+				e1.printStackTrace();
+				return;
 			}
 			
-			for (int j = 0; j < layers.length; j++) {
-				try {					
-					layers[j].setWeights(Matrix.add(layers[j].getWeights(), weights[j]));
-					layers[j].setBiases(Matrix.add(layers[j].getBiases(), biases[j]));
-				} catch (InvalidMatrixDimensionsException e) {
-					e.printStackTrace();
-				}
+			try {
+				layers[l].setWeights(Matrix.add(layers[l].getWeights(), weights[l]));
+				layers[l].setBiases(Matrix.add(layers[l].getBiases(), biases[l]));
+			} catch (InvalidMatrixDimensionsException e) {
+				e.printStackTrace();
 			}
 			
 			baseDerivative = currDerivative;
@@ -108,33 +107,41 @@ public class Trainer extends Model implements Runnable {
 		}
 	}
 
-	public double getBiasDerivative() {
-		return 1;
+	public Matrix getCostDerivative(Matrix actual, Matrix predicted) {
+		try {
+			return Matrix.multiply(2, Matrix.subtract(predicted, actual));
+		} catch (InvalidMatrixDimensionsException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
-	public double getCostDerivative(double actual, double predicted) {
-		return 2 * (predicted - actual);
+	public Matrix getWeightDerivative(int layerNum) {
+		return Matrix.makeDiagonal(nodeOutputs[layerNum - 1].getArray()[0]);
 	}
 
-	public double getWeightDerivative(int layerNum, int weightNum) {
-		return nodeOutputs[layerNum - 1].getArray()[0][weightNum];
-	}
+	public Matrix getNodeDerivative(int layerNum) {
 
-	public double getNodeDerivative(int layerNum, int nodeNum) {
-		double y = nodeOutputs[layerNum].getArray()[0][nodeNum];
-		double z = -Math.log((1 - y) / y);
-		return Math.pow(Math.E, -z) / Math.pow(1 + Math.pow(Math.E, -z), 2);
+		double[] a = new double[layers[layerNum].getNumNodes()];
+
+		for (int nodeNum = 0; nodeNum < layers[layerNum].getNumNodes(); nodeNum++) {
+			double y = nodeOutputs[layerNum].getArray()[0][nodeNum];
+			double z = -Math.log((1 - y) / y);
+			a[nodeNum] = Math.pow(Math.E, -z) / Math.pow(1 + Math.pow(Math.E, -z), 2);
+		}
+
+		return Matrix.makeDiagonal(a);
 	}
 
 	public double getPrevNodeDerivative(int layerNum, int nodeNum, int prevNodeNum) {
-		return layers[layerNum].getWeights().getArray()[prevNodeNum][nodeNum];//.getNode(nodeNum).getWeights()[prevNodeNum];
+		return layers[layerNum].getWeights().getArray()[prevNodeNum][nodeNum];// .getNode(nodeNum).getWeights()[prevNodeNum];
 	}
 
 	public Matrix feedForward(Matrix inputs) {
 		Matrix out = inputs;
 		for (int i = 0; i < layers.length; i++) {
 			out = layers[i].calculate(out);
-			nodeOutputs[i] = out;
+			nodeOutputs[i] = new Matrix(out);
 		}
 		return out;
 	}
