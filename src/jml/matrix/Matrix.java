@@ -1,5 +1,7 @@
 package jml.matrix;
 
+import java.util.Random;
+
 import jml.matrix.exceptions.InvalidMatrixDimensionsException;
 
 public class Matrix {
@@ -25,11 +27,13 @@ public class Matrix {
 	 * Creates Matrix with Dimensions of (x,y) Fills Matrix with random integer from
 	 * 0 - range
 	 */
-	public Matrix(final int width, final int height, int range) {
+	public Matrix(final int width, final int height, double range) {
+		Random rand = new Random();
+		
 		array = new double[width][height];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				array[i][j] = (int) (Math.random() * range);
+				array[i][j] = rand.nextDouble() * range;
 			}
 		}
 	}

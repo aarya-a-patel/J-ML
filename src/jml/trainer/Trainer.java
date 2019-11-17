@@ -28,10 +28,13 @@ public class Trainer extends Model implements Runnable {
 
 	public void run() {
 		while (running) {
-			System.out.println(this.calculateError(this.feedForward(data.getInputs()), data.getActuals()));
+
+			Matrix predicted = this.feedForward(data.getInputs());
+			double totalError = this.calculateError(predicted, data.getActuals());
+			System.out.println(totalError);
 			this.makeChanges(data.getActuals());
 			data.increment();
-			running = false;
+			// running = false;
 		}
 	}
 
@@ -81,14 +84,14 @@ public class Trainer extends Model implements Runnable {
 				e1.printStackTrace();
 				return;
 			}
-			
+
 			try {
 				layers[l].setWeights(Matrix.add(layers[l].getWeights(), weights[l]));
 				layers[l].setBiases(Matrix.add(layers[l].getBiases(), biases[l]));
 			} catch (InvalidMatrixDimensionsException e) {
 				e.printStackTrace();
 			}
-			
+
 			baseDerivative = currDerivative;
 			currDerivative = null;
 		}
