@@ -34,7 +34,7 @@ public class Trainer extends Model implements Runnable {
 			Matrix predicted = this.feedForward(data.getInputs());
 			double totalError = this.calculateError(predicted, data.getActuals());
 			System.out.println(totalError);
-
+			System.out.println(predicted.toString());
 			System.out.println(layers[1].toString());
 
 			this.makeChanges(data.getActuals());
