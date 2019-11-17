@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import jml.matrix.Matrix;
 import jml.trainer.DataParser;
 
 public class DataParserTester implements DataParser {
@@ -24,18 +25,18 @@ public class DataParserTester implements DataParser {
 	}
 
 	@Override
-	public double[] getInputs() {
+	public Matrix getInputs() {
 
-		double[] retInputs = { inputs.get(position) };
+		double[][] retInputs = {{ inputs.get(position) }};
 
-		return retInputs;
+		return new Matrix(retInputs);
 	}
 
-	public double[] getActuals() {
+	public Matrix getActuals() {
 
-		double[] retInputs = { actual.get(position) };
+		double[][] retInputs = {{ actual.get(position) }};
 
-		return retInputs;
+		return new Matrix(retInputs);
 	}
 	
 	public void increment() {
