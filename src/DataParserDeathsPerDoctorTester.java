@@ -6,7 +6,7 @@ import java.util.Scanner;
 import jml.matrix.Matrix;
 import jml.trainer.DataParser;
 
-public class DataParserTester implements DataParser {
+public class DataParserDeathsPerDoctorTester implements DataParser {
 
 	private ArrayList<Double> inputs;
 	private ArrayList<Double> actual;
