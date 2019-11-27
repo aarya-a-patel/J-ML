@@ -165,7 +165,7 @@ public class Matrix {
 	}
 
 	/**
-	 * Experimental version of multiply for edge cases.
+	 * Multiply Matrices with a width of 1 like multiplication tables
 	 */
 	public static Matrix layerMultiply(Matrix m1, Matrix m2) throws InvalidMatrixDimensionsException {
 
@@ -179,7 +179,6 @@ public class Matrix {
 		for (int x = 0; x < m1.height(); x++) {
 			for (int y = 0; y < m2.height(); y++) {
 				out[x][y] = a1[0][x] * a2[0][y];
-				
 			}
 		}
 
