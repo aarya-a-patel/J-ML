@@ -1,7 +1,5 @@
 package jml.matrix;
 
-import java.util.Random;
-
 import jml.matrix.exceptions.InvalidMatrixDimensionsException;
 
 public class Matrix {
@@ -171,22 +169,17 @@ public class Matrix {
 	 */
 	public static Matrix layerMultiply(Matrix m1, Matrix m2) throws InvalidMatrixDimensionsException {
 
-		if (m1.width() != m2.width()) {
+		if (m1.width() != m2.width() && m1.width() == 1) {
 			throw new InvalidMatrixDimensionsException("Matrix 2 doesn't match Matrix 1 -- Cannot Multiply");
 		}
 
 		double[][] a1 = m1.getArray();
 		double[][] a2 = m2.getArray();
-		double[][] out = new double[m2.width()][m2.height()];
-		for (int x = 0; x < m2.width(); x++) {
+		double[][] out = new double[m1.height()][m2.height()];
+		for (int x = 0; x < m1.height(); x++) {
 			for (int y = 0; y < m2.height(); y++) {
-				int sum = 0;
-
-				for (int yy = 0; yy < m1.height(); yy++) {
-					sum += a1[x][yy] * a2[x][y];
-				}
-
-				out[x][y] = sum;
+				out[x][y] = a1[0][x] * a2[0][y];
+				
 			}
 		}
 
