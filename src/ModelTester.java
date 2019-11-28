@@ -3,7 +3,7 @@ import jml.trainer.Trainer;
 
 public class ModelTester {
 	public static void main(String[] args) {
-		int[] nodes = { 1, 2, 1 };
+		int[] nodes = { 1, 1 };
 		Model m = new Model(nodes, false);
 
 		//System.out.println(m.toString());
@@ -12,7 +12,7 @@ public class ModelTester {
 
 		dp.openFile("src\\DeathsPer100kvsDoctorsPer100k.txt");
 		
-		Trainer t = new Trainer(m, dp);
+		Trainer t = new Trainer(m, dp, 500000);
 
 		t.start();
 

@@ -11,12 +11,14 @@ public class Trainer extends Model implements Runnable {
 	private boolean running;
 	private Thread thread;
 	private double learningRate = 0.0001;
+	private long numIterations;
 
-	public Trainer(Model model, DataParser data) {
+	public Trainer(Model model, DataParser data, int iterations) {
 		super(model);
 		this.data = data;
 		this.running = false;
 		this.nodeOutputs = new Matrix[layers.length];
+		this.numIterations = iterations;
 	}
 
 	public void start() {
@@ -42,7 +44,7 @@ public class Trainer extends Model implements Runnable {
 
 			this.makeChanges(data.getActuals());
 			data.increment();
-			running = test < 500000;
+			running = test < numIterations;
 			test++;
 
 			System.out.println("\n");
