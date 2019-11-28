@@ -48,7 +48,7 @@ public class Train {
 		}
 
 		public void increment() {
-			index++;
+			index = (index + 1) % actuals.size();
 		}
 
 		public void openFile(String fileName) {
@@ -61,6 +61,9 @@ public class Train {
 				
 				for (int i = 0; file.hasNextLine(); i++) {
 					data = file.nextLine().split(",");
+					
+					actual = new double[1][10];
+					input = new double[1][784];
 					
 					for (int j = 0; j < 10; j++) {
 						actual[0][j] = 0;
@@ -75,7 +78,6 @@ public class Train {
 					inputs.add(new Matrix(input));
 					actuals.add(new Matrix(actual));
 				}
-				
 				
 				file.close();
 			} catch (FileNotFoundException e) {
