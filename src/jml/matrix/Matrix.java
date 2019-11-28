@@ -130,7 +130,8 @@ public class Matrix {
 	public static Matrix multiply(Matrix m1, Matrix m2) throws InvalidMatrixDimensionsException {
 
 		if (m1.width() != m2.height()) {
-			throw new InvalidMatrixDimensionsException("Matrix 2 doesn't match Matrix 1 -- Cannot Multiply");
+			throw new InvalidMatrixDimensionsException("Matrix 2 doesn't match Matrix 1 -- Cannot Multiply. M1-Size = "
+					+ m1.width() + ", " + m1.height() + " M2-Size = " + m2.width() + ", " + m2.height());
 		}
 
 		double[][] a1 = m1.getArray();
@@ -222,6 +223,21 @@ public class Matrix {
 			}
 		}
 		return new Matrix(returnArray);
+	}
+
+	public static Matrix condense(Matrix m) {
+		double[][] a = m.getArray().clone();
+		double[][] out = new double[1][m.height()];
+
+		for (int y = 0; y < m.height(); y++) {
+			double sum = 0;
+			for (int x = 0; x < m.width(); x++) {
+				sum += a[x][y];
+			}
+			out[0][y] = sum;
+		}
+		
+		return new Matrix(out);
 	}
 
 }
