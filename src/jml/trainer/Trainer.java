@@ -10,6 +10,7 @@ public class Trainer extends Model implements Runnable {
 	private Matrix[] nodeOutputs;
 	private boolean running;
 	private Thread thread;
+
 	private double learningRate = 0.0001;
 
 	public Trainer(Model model, DataParser data) {
@@ -150,5 +151,13 @@ public class Trainer extends Model implements Runnable {
 			nodeOutputs[i] = new Matrix(out);
 		}
 		return out;
+	}
+
+	public double getLearningRate() {
+		return learningRate;
+	}
+
+	public void setLearningRate(double learningRate) {
+		this.learningRate = learningRate;
 	}
 }

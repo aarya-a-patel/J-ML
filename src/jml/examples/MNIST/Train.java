@@ -21,6 +21,8 @@ public class Train {
 
 		dp.openFile("src\\jml\\examples\\MNIST\\mnist_train.csv");
 
+		t.setLearningRate(0.001);
+
 		t.start();
 	}
 
